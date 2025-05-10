@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Biblioteca.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.Data
 {
@@ -7,5 +8,7 @@ namespace Biblioteca.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+
+        public DbSet<LivrosModel> Livros { get; set; }
     }
 }
