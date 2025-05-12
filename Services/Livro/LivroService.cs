@@ -1,4 +1,5 @@
 ﻿using Biblioteca.Data;
+using Biblioteca.Dtos;
 using Biblioteca.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,11 @@ namespace Biblioteca.Services.Livro
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public Task<LivrosModel> CriarLivro(LivroCriacaoDto livroCriacaoDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }
