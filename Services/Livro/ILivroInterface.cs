@@ -6,6 +6,7 @@ namespace Biblioteca.Services.Livro
     public interface ILivroInterface
     {
         Task<List<LivrosModel>> BuscarLivros();
-        Task<LivrosModel> CriarLivro(LivroCriacaoDto livroCriacaoDto);
+        bool VerificaSeJaExisteCadastro(LivroCriacaoDto livroCriacaoDto);
+        Task<LivrosModel> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Biblioteca.Models;
+﻿using Biblioteca.Dtos;
+using Biblioteca.Models;
 using Biblioteca.Services.Livro;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,33 @@ namespace Biblioteca.Controllers
         public ActionResult Cadastrar()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto)
+        {
+            if (foto != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    if (!_livroInterface.VerificaSeJaExisteCadastro(livroCriacaoDto))
+                    {
+                        return View(livroCriacaoDto);
+                    }
+
+                    var livro  = await _livroInterface.Cadastrar(livroCriacaoDto, foto);
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(livroCriacaoDto);
+                }
+            }
+            else
+            {
+                return View(livroCriacaoDto);
+            }
         }
     }
 }

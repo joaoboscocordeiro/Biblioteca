@@ -10,8 +10,6 @@ namespace Biblioteca.Dtos
         public string Autor { get; set; } = string.Empty;
         [Required(ErrorMessage = "Insira uma descrição!")]
         public string Descricao { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Insira uma capa!")]
-        public string Capa { get; set; } = string.Empty;
         [Required(ErrorMessage = "Insira o ISBN!")]
         public string ISBN { get; set; } = string.Empty;
         [Required(ErrorMessage = "Insira um genero!")]

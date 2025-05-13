@@ -8,10 +8,12 @@ namespace Biblioteca.Services.Livro
     public class LivroService : ILivroInterface
     {
         private readonly AppDbContext _context;
+        private string _caminhoServidor;
 
-        public LivroService(AppDbContext context)
+        public LivroService(AppDbContext context, IWebHostEnvironment sistema)
         {
             _context = context;
+            _caminhoServidor = sistema.WebRootPath;
         }
 
         public async Task<List<LivrosModel>> BuscarLivros()
@@ -26,9 +28,65 @@ namespace Biblioteca.Services.Livro
             }
         }
 
-        public Task<LivrosModel> CriarLivro(LivroCriacaoDto livroCriacaoDto)
+        public async Task<LivrosModel> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var codigoUnico = Guid.NewGuid().ToString();
+                var nomeImage = foto.FileName.Replace(" ","").ToLower() + codigoUnico + livroCriacaoDto.ISBN + ".png";
+
+                string caminhoImage = _caminhoServidor + "\\Imagem\\";
+
+                if (!Directory.Exists(caminhoImage))
+                {
+                    Directory.CreateDirectory(caminhoImage);
+                }
+
+                using (var stream = System.IO.File.Create(caminhoImage + nomeImage))
+                {
+                    foto.CopyToAsync(stream).Wait();
+                }
+
+                var livro = new LivrosModel
+                {
+                    Titulo = livroCriacaoDto.Titulo,
+                    Autor = livroCriacaoDto.Autor,
+                    Descricao = livroCriacaoDto.Descricao,
+                    Capa = nomeImage,
+                    ISBN = livroCriacaoDto.ISBN,
+                    Genero = livroCriacaoDto.Genero,
+                    AnoPublicacao = livroCriacaoDto.AnoPublicacao,
+                    QuantidadeEstoque = livroCriacaoDto.QuantidadeEstoque
+                };
+
+                _context.Add(livro);
+                await _context.SaveChangesAsync();
+
+                return livro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public bool VerificaSeJaExisteCadastro(LivroCriacaoDto livroCriacaoDto)
+        {
+            try
+            {
+                var livroDB = _context.Livros.FirstOrDefault(livro => livro.ISBN == livroCriacaoDto.ISBN);
+
+                if (livroDB != null)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            } 
         }
     }
 }

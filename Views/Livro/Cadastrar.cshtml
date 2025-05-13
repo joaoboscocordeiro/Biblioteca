@@ -3,7 +3,7 @@
 
 <div class="container mt-5">
 
-    <form>
+    <form method="post" asp-action="Cadastrar" asp-controller="Livro" enctype="multipart/form-data">
 
         <div class="text-center">
             <label for="ImageFile">
@@ -13,8 +13,7 @@
 
         <div class="mb-1">
             <label class="form-label mt-3">Capa:</label>
-            <input type="file" id="ImageFile" name="foto" class="form-control shadow-none" asp-for="Capa"/>
-            <span asp-validation-for="Capa" class="text-danger"></span>
+            <input type="file" id="ImageFile" name="foto" class="form-control shadow-none" />
         </div>
 
         <div class="mb-1">
