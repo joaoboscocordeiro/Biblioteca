@@ -19,6 +19,19 @@ namespace Biblioteca.Services.Livro
             _caminhoServidor = sistema.WebRootPath;
         }
 
+        public async Task<LivrosModel> BuscarLivroPorId(int? id)
+        {
+            try
+            {
+                var livro = await _context.Livros.FirstOrDefaultAsync(x => x.Id == id);
+                return livro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<LivrosModel>> BuscarLivros()
         {
             try

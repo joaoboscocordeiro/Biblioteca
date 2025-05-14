@@ -8,5 +8,6 @@ namespace Biblioteca.Services.Livro
         Task<List<LivrosModel>> BuscarLivros();
         bool VerificaSeJaExisteCadastro(LivroCriacaoDto livroCriacaoDto);
         Task<LivrosModel> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto);
+        Task<LivrosModel> BuscarLivroPorId(int? id);
     }
 }

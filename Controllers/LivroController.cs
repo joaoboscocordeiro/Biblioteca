@@ -26,6 +26,17 @@ namespace Biblioteca.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Detalhes(int? id)
+        {
+            if (id != null)
+            {
+                var livro = await _livroInterface.BuscarLivroPorId(id);
+                return View(livro);
+            }
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto)
         {

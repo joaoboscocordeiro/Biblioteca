@@ -60,7 +60,7 @@
                             <td><i class="bi bi-envelope-at mx-1"></i>@livro.QuantidadeEstoque</td>
                             <td><i class="bi bi-calendar mx-1"></i>@livro.DataCadastro</td>
                             <td>
-                                <a class="btn btn-warning"><i class="bi bi-file-earmark-zip mx-1"></i>Detalhes</a>
+                                <a class="btn btn-warning" asp-action="Detalhes" asp-controller="Livro" asp-route-id="@livro.Id"><i class="bi bi-file-earmark-zip mx-1"></i>Detalhes</a>
                                 <a class="btn btn-info"><i class="bi bi-pencil mx-1"></i>Editar</a>
                             </td>
                         </tr>
