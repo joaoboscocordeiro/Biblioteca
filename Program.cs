@@ -10,6 +10,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ILivroInterface, LivroService>();
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

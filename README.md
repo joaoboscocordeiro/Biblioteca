@@ -8,6 +8,7 @@ Aplicação para Empréstimo de Livros
 #### 1 - Linguagem C#
 #### 2 - Entity Framework
 #### 3 - SQL Server
+#### 4 - AutoMapper
 
 ----------------------------------------------------------------------------------------------------
 

@@ -1,4 +1,5 @@
-﻿using Biblioteca.Data;
+﻿using AutoMapper;
+using Biblioteca.Data;
 using Biblioteca.Dtos;
 using Biblioteca.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +9,13 @@ namespace Biblioteca.Services.Livro
     public class LivroService : ILivroInterface
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
         private string _caminhoServidor;
 
-        public LivroService(AppDbContext context, IWebHostEnvironment sistema)
+        public LivroService(AppDbContext context, IWebHostEnvironment sistema, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
             _caminhoServidor = sistema.WebRootPath;
         }
 
@@ -47,17 +50,20 @@ namespace Biblioteca.Services.Livro
                     foto.CopyToAsync(stream).Wait();
                 }
 
-                var livro = new LivrosModel
-                {
-                    Titulo = livroCriacaoDto.Titulo,
-                    Autor = livroCriacaoDto.Autor,
-                    Descricao = livroCriacaoDto.Descricao,
-                    Capa = nomeImage,
-                    ISBN = livroCriacaoDto.ISBN,
-                    Genero = livroCriacaoDto.Genero,
-                    AnoPublicacao = livroCriacaoDto.AnoPublicacao,
-                    QuantidadeEstoque = livroCriacaoDto.QuantidadeEstoque
-                };
+                //var livro = new LivrosModel
+                //{
+                //    Titulo = livroCriacaoDto.Titulo,
+                //    Autor = livroCriacaoDto.Autor,
+                //    Descricao = livroCriacaoDto.Descricao,
+                //    Capa = nomeImage,
+                //    ISBN = livroCriacaoDto.ISBN,
+                //    Genero = livroCriacaoDto.Genero,
+                //    AnoPublicacao = livroCriacaoDto.AnoPublicacao,
+                //    QuantidadeEstoque = livroCriacaoDto.QuantidadeEstoque
+                //};
+
+                var livro = _mapper.Map<LivrosModel>(livroCriacaoDto);
+                livro.Capa = nomeImage;
 
                 _context.Add(livro);
                 await _context.SaveChangesAsync();
