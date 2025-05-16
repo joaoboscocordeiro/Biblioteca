@@ -1,4 +1,5 @@
-﻿using Biblioteca.Dtos;
+﻿using AutoMapper;
+using Biblioteca.Dtos;
 using Biblioteca.Models;
 using Biblioteca.Services.Livro;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,12 @@ namespace Biblioteca.Controllers
     public class LivroController : Controller
     {
         private readonly ILivroInterface _livroInterface;
+        private readonly IMapper _mapper;
 
-        public LivroController(ILivroInterface livroInterface)
+        public LivroController(ILivroInterface livroInterface, IMapper mapper)
         {
             _livroInterface = livroInterface;
+            _mapper = mapper;
         }
 
         public async Task<ActionResult<List<LivrosModel>>> Index()
@@ -34,6 +37,20 @@ namespace Biblioteca.Controllers
                 var livro = await _livroInterface.BuscarLivroPorId(id);
                 return View(livro);
             }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Editar(int? id)
+        {
+            if (id != null)
+            {
+                var livro = await _livroInterface.BuscarLivroPorId(id);
+                var livroEdicaoDto = _mapper.Map<LivroEdicaoDto>(livro);
+                
+                return View(livroEdicaoDto);
+            }
+
             return RedirectToAction("Index");
         }
 
