@@ -1,5 +1,6 @@
 using Biblioteca.Data;
 using Biblioteca.Services.Livro;
+using Biblioteca.Services.Usuario;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ILivroInterface, LivroService>();
+builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();

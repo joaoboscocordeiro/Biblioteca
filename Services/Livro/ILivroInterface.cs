@@ -5,9 +5,10 @@ namespace Biblioteca.Services.Livro
 {
     public interface ILivroInterface
     {
-        Task<List<LivrosModel>> BuscarLivros();
+        Task<List<LivroModel>> BuscarLivros();
         bool VerificaSeJaExisteCadastro(LivroCriacaoDto livroCriacaoDto);
-        Task<LivrosModel> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto);
-        Task<LivrosModel> BuscarLivroPorId(int? id);
+        Task<LivroModel> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto);
+        Task<LivroModel> BuscarLivroPorId(int? id);
+        Task<LivroModel> Editar(LivroEdicaoDto livroEdicaoDto, IFormFile foto);
     }
 }

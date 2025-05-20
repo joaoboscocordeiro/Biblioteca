@@ -19,7 +19,7 @@ namespace Biblioteca.Services.Livro
             _caminhoServidor = sistema.WebRootPath;
         }
 
-        public async Task<LivrosModel> BuscarLivroPorId(int? id)
+        public async Task<LivroModel> BuscarLivroPorId(int? id)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Biblioteca.Services.Livro
             }
         }
 
-        public async Task<List<LivrosModel>> BuscarLivros()
+        public async Task<List<LivroModel>> BuscarLivros()
         {
             try
             {
@@ -44,44 +44,62 @@ namespace Biblioteca.Services.Livro
             }
         }
 
-        public async Task<LivrosModel> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto)
+        public async Task<LivroModel> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto)
         {
             try
             {
-                var codigoUnico = Guid.NewGuid().ToString();
-                var nomeImage = foto.FileName.Replace(" ","").ToLower() + codigoUnico + livroCriacaoDto.ISBN + ".png";
+                var nomeImagem = GeraCaminhoArquivo(foto);
 
-                string caminhoImage = _caminhoServidor + "\\Imagem\\";
-
-                if (!Directory.Exists(caminhoImage))
-                {
-                    Directory.CreateDirectory(caminhoImage);
-                }
-
-                using (var stream = System.IO.File.Create(caminhoImage + nomeImage))
-                {
-                    foto.CopyToAsync(stream).Wait();
-                }
-
-                //var livro = new LivrosModel
-                //{
-                //    Titulo = livroCriacaoDto.Titulo,
-                //    Autor = livroCriacaoDto.Autor,
-                //    Descricao = livroCriacaoDto.Descricao,
-                //    Capa = nomeImage,
-                //    ISBN = livroCriacaoDto.ISBN,
-                //    Genero = livroCriacaoDto.Genero,
-                //    AnoPublicacao = livroCriacaoDto.AnoPublicacao,
-                //    QuantidadeEstoque = livroCriacaoDto.QuantidadeEstoque
-                //};
-
-                var livro = _mapper.Map<LivrosModel>(livroCriacaoDto);
-                livro.Capa = nomeImage;
+                var livro = _mapper.Map<LivroModel>(livroCriacaoDto);
+                livro.Capa = nomeImagem;
 
                 _context.Add(livro);
                 await _context.SaveChangesAsync();
 
                 return livro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<LivroModel> Editar(LivroEdicaoDto livroEdicaoDto, IFormFile foto)
+        {
+            try
+            {
+                var livro = await _context.Livros.FirstOrDefaultAsync(l => l.Id == livroEdicaoDto.Id);
+
+                var nomeCaminhoImagem = "";
+                if (foto != null)
+                {
+                    string caminhoCapaExistente = _caminhoServidor + "\\Imagem\\" + livro.Capa;
+
+                    if (File.Exists(caminhoCapaExistente))
+                    {
+                        File.Delete(caminhoCapaExistente);
+                    }
+
+                    nomeCaminhoImagem = GeraCaminhoArquivo(foto);
+                }
+
+                var livroModel = _mapper.Map<LivroModel>(livroEdicaoDto);
+
+                if (nomeCaminhoImagem != "")
+                {
+                    livroModel.Capa = nomeCaminhoImagem;
+                }
+                else
+                {
+                    livroModel.Capa = livro.Capa;
+                }
+
+                livroModel.DataAlteracao = DateTime.Now;
+
+                _context.Update(livroModel);
+                await _context.SaveChangesAsync();
+
+                return livroModel;
             }
             catch (Exception ex)
             {
@@ -106,6 +124,26 @@ namespace Biblioteca.Services.Livro
             {
                 throw new Exception(ex.Message);
             } 
+        }
+
+        public string GeraCaminhoArquivo(IFormFile foto)
+        {
+            var codigoUnico = Guid.NewGuid().ToString();
+            var nomeImage = foto.FileName.Replace(" ", "").ToLower() + codigoUnico + ".png";
+
+            string caminhoImage = _caminhoServidor + "\\Imagem\\";
+
+            if (!Directory.Exists(caminhoImage))
+            {
+                Directory.CreateDirectory(caminhoImage);
+            }
+
+            using (var stream = System.IO.File.Create(caminhoImage + nomeImage))
+            {
+                foto.CopyToAsync(stream).Wait();
+            }
+
+            return nomeImage;
         }
     }
 }

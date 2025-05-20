@@ -8,8 +8,9 @@ namespace Biblioteca.Profiles
     {
         public ProfileAutoMapper()
         {
-            CreateMap<LivroCriacaoDto, LivrosModel>();
-            CreateMap<LivroEdicaoDto, LivrosModel>();
+            CreateMap<LivroCriacaoDto, LivroModel>();
+            CreateMap<LivroModel, LivroEdicaoDto>();
+            CreateMap<LivroEdicaoDto, LivroModel>();
         }
     }
 }

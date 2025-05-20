@@ -3,6 +3,7 @@ using Biblioteca.Dtos;
 using Biblioteca.Models;
 using Biblioteca.Services.Livro;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace Biblioteca.Controllers
 {
@@ -17,7 +18,7 @@ namespace Biblioteca.Controllers
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<List<LivrosModel>>> Index()
+        public async Task<ActionResult<List<LivroModel>>> Index()
         {
             var livros = await _livroInterface.BuscarLivros();
             return View(livros);
@@ -83,6 +84,22 @@ namespace Biblioteca.Controllers
             {
                 TempData["MensagemErro"] = "Incluir uma imagem de capa!";
                 return View(livroCriacaoDto);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Editar(LivroEdicaoDto livroEdicaoDto, IFormFile? foto)
+        {
+            if (ModelState.IsValid)
+            {
+                var livro = await _livroInterface.Editar(livroEdicaoDto, foto);
+                TempData["MensagemSucesso"] = "Produto editado com sucesso!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["MesagemErro"] = "Verifique os dados preenchidos!";
+                return View(livroEdicaoDto);
             }
         }
     }

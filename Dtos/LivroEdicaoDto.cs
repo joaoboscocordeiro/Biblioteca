@@ -7,8 +7,7 @@ namespace Biblioteca.Dtos
         public int Id { get; set; }
         [Required(ErrorMessage = "Insira um título!")]
         public string Titulo { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Insira uma Capa!")]
-        public string Capa { get; set; } = string.Empty;
+        public string? Capa { get; set; } = string.Empty;
         [Required(ErrorMessage = "Insira um autor!")]
         public string Autor { get; set; } = string.Empty;
         [Required(ErrorMessage = "Insira uma descrição!")]

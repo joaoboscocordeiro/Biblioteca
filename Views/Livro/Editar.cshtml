@@ -1,11 +1,25 @@
 ﻿@using Biblioteca.Dtos
 @model LivroEdicaoDto
 
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success text-dark" role="alert">
+        @TempData["MensagemSucesso"]
+    </div>
+}
+
+@if (TempData["MensagemErro"] != null)
+{
+    <div class="alert alert-success text-dark" role="alert">
+        @TempData["MensagemErro"]
+    </div>
+}
+
 <div class="container mt-5">
 
-    <form method="post" asp-action="Editar" asp-controller="Livro" enctype="multipart/form-data">
+    <form asp-action="Editar" asp-controller="Livro" method="post" enctype="multipart/form-data">
 
-        <h2>Edição de Livro</h2>
+        <h2>Edição do Livro - @Model.Titulo</h2>
 
         <input type="hidden" asp-for="Id" />
 
@@ -20,7 +34,8 @@
 
         <div class="mb-1">
             <label class="form-label mt-3">Capa:</label>
-            <input type="file" id="ImageFile" name="foto" class="form-control shadow-none" />
+            <input type="file" id="ImageFile" name="foto" class="form-control shadow-none" asp-for="Capa" />
+            <span asp-validation-for="Capa" class="text-danger"></span>
         </div>
 
         <div class="mb-1">
@@ -60,9 +75,11 @@
                 <input type="number" min="1" class="form-control shadow-none" asp-for="QuantidadeEstoque" />
                 <span asp-validation-for="QuantidadeEstoque" class="text-danger"></span>
             </div>
+
+            <input type="hidden" asp-for="ISBN" />
             <div class="mb-1 col-6">
                 <label class="form-label mt-3">ISBN:</label>
-                <input type="text" class="form-control shadow-none" asp-for="ISBN" />
+                <input type="text" class="form-control shadow-none" asp-for="ISBN" disabled />
                 <span asp-validation-for="ISBN" class="text-danger"></span>
             </div>
         </div>
