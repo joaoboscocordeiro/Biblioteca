@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Biblioteca.Dtos;
+using Biblioteca.Dtos.Livro;
 using Biblioteca.Models;
 using Biblioteca.Services.Livro;
 using Microsoft.AspNetCore.Mvc;

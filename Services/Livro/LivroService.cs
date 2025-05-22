@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Biblioteca.Data;
-using Biblioteca.Dtos;
+using Biblioteca.Dtos.Livro;
 using Biblioteca.Models;
 using Microsoft.EntityFrameworkCore;
 

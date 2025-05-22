@@ -1,4 +1,5 @@
-﻿using Biblioteca.Services.Usuario;
+﻿using Biblioteca.Enums;
+using Biblioteca.Services.Usuario;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Biblioteca.Controllers
@@ -16,6 +17,19 @@ namespace Biblioteca.Controllers
         {
             var usuarios = await _usuarioInterface.BuscarUsuario(id);
             return View(usuarios);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Cadastrar(int? id)
+        {
+            ViewBag.Perfil = PerfilEnum.Administrador;
+
+            if (id != null)
+            {
+                ViewBag.Perfil = PerfilEnum.Cliente;
+            }
+
+            return View();
         }
     }
 }

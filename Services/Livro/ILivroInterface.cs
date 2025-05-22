@@ -1,4 +1,4 @@
-﻿using Biblioteca.Dtos;
+﻿using Biblioteca.Dtos.Livro;
 using Biblioteca.Models;
 
 namespace Biblioteca.Services.Livro

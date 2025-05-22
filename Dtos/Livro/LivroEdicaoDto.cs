@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Biblioteca.Dtos
+namespace Biblioteca.Dtos.Livro
 {
     public class LivroEdicaoDto
     {

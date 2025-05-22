@@ -17,14 +17,12 @@
 
 <div class="container mt-5">
 
-    <div class="d-flex justify-content-between align-items-center">
-
+    <div class="btn-box d-flex justify-content-between align-items-center mb-3">
         <h2>Cadastrar Clientes</h2>
-        <a asp-controller="Usuario" asp-action="Cadastrar" asp-route-id="0" class="btn btn-success"><i class="bi bi-plus-circle mx-2"></i>Cadastrar novo Cliente</a>
-
+        <a class="btn btn-success" asp-controller="Usuario" asp-action="Cadastrar" asp-route-id="0"><i class="bi bi-plus-circle mx-2"></i>Cadastrar novo Cliente</a>
     </div>
 
-    <table class="table table-hover" id="registros">
+    <table class="table table-hover" id="registro">
         <thead>
             <tr>
                 <th></th>
@@ -37,7 +35,6 @@
             </tr>
         </thead>
         <tbody>
-
             @if (Model != null)
             {
                 @if (Model.Count() > 0)
@@ -77,7 +74,6 @@
                     <tr><td colspan="7" class="text-center">Sem Clientes Registrados!</td></tr>
                 }
             }
-
         </tbody>
     </table>
 
