@@ -1,4 +1,5 @@
-﻿using Biblioteca.Enums;
+﻿using Biblioteca.Dtos.Usuario;
+using Biblioteca.Enums;
 using Biblioteca.Services.Usuario;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace Biblioteca.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Cadastrar(int? id)
+        public ActionResult Cadastrar(int? id)
         {
             ViewBag.Perfil = PerfilEnum.Administrador;
 
@@ -30,6 +31,37 @@ namespace Biblioteca.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Cadastrar(UsuarioCriacaoDto usuarioCriacaoDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var usuario = await _usuarioInterface.VerificaSeExisteUsuarioEEmail(usuarioCriacaoDto);
+                if (!usuario)
+                {
+                    TempData["MensagemErro"] = "Já existe email/usuário cadastrado!";
+                    return View(usuarioCriacaoDto);
+                }
+
+                // Cadastrar Usuário
+                var user = await _usuarioInterface.Cadastrar(usuarioCriacaoDto);
+
+                TempData["MensagemSucesso"] = "Cadastro realizado com sucesso!";
+
+                if (user.Perfil != PerfilEnum.Cliente)
+                {
+                    return RedirectToAction("Index", "Funcionario");
+                }
+
+                return RedirectToAction("Index", "Cliente", new { id = "0" });
+            }
+            else
+            {
+                TempData["MensagemErro"] = "Verifique os dados informados!";
+                return View(usuarioCriacaoDto);
+            }
         }
     }
 }
