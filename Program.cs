@@ -1,4 +1,5 @@
 using Biblioteca.Data;
+using Biblioteca.Services.Autenticacao;
 using Biblioteca.Services.Livro;
 using Biblioteca.Services.Usuario;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ILivroInterface, LivroService>();
 builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
+builder.Services.AddScoped<IAutenticacaoInterface, AutenticacaoService>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();

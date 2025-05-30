@@ -1,6 +1,7 @@
 ﻿using Biblioteca.Data;
 using Biblioteca.Dtos.Usuario;
 using Biblioteca.Models;
+using Biblioteca.Services.Autenticacao;
 using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.Services.Usuario
@@ -8,10 +9,12 @@ namespace Biblioteca.Services.Usuario
     public class UsuarioService : IUsuarioInterface
     {
         private readonly AppDbContext _context;
+        private readonly IAutenticacaoInterface _autenticacaoInterface;
 
-        public UsuarioService(AppDbContext context)
+        public UsuarioService(AppDbContext context, IAutenticacaoInterface autenticacaoInterface)
         {
             _context = context;
+            _autenticacaoInterface = autenticacaoInterface;
         }
 
         public async Task<List<UsuarioModel>> BuscarUsuario(int? id)
@@ -37,11 +40,40 @@ namespace Biblioteca.Services.Usuario
             }
         }
 
-        public Task<UsuarioCriacaoDto> Cadastrar(UsuarioCriacaoDto usuarioCriacaoDto)
+        public async Task<UsuarioCriacaoDto> Cadastrar(UsuarioCriacaoDto usuarioCriacaoDto)
         {
             try
             {
+                _autenticacaoInterface.CriarSenhaHash(usuarioCriacaoDto.Senha, out byte[] senhaHash, out byte[] senhaSalt);
 
+                var usuario = new UsuarioModel
+                {
+                    NomeCompleto = usuarioCriacaoDto.NomeCompleto,
+                    Usuario = usuarioCriacaoDto.Usuario,
+                    Email = usuarioCriacaoDto.Email,
+                    Perfil = usuarioCriacaoDto.Perfil,
+                    Turno = usuarioCriacaoDto.Turno,
+                    SenhaHash = senhaHash,
+                    SenhaSalt = senhaSalt
+                };
+
+                var endereco = new EnderecoModel
+                {
+                    Logradouro = usuarioCriacaoDto.Logradouro,
+                    Numero = usuarioCriacaoDto.Numero,
+                    Bairro = usuarioCriacaoDto.Bairro,
+                    Estado = usuarioCriacaoDto.Estado,
+                    Complemento = usuarioCriacaoDto.Complemento,
+                    CEP = usuarioCriacaoDto.CEP,
+                    Usuario = usuario
+                };
+
+                usuario.Endereco = endereco;
+
+                _context.Add(usuario);
+                await _context.SaveChangesAsync();
+
+                return usuarioCriacaoDto;
             }
             catch (Exception ex)
             {
