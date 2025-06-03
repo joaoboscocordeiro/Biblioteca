@@ -40,6 +40,19 @@ namespace Biblioteca.Services.Usuario
             }
         }
 
+        public async Task<UsuarioModel> BuscarUsuarioPorId(int? id)
+        {
+            try
+            {
+                var usuario = await _context.Usuarios.FirstOrDefaultAsync(usuarioDB => usuarioDB.Id == id);
+                return usuario;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<UsuarioCriacaoDto> Cadastrar(UsuarioCriacaoDto usuarioCriacaoDto)
         {
             try

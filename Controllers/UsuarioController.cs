@@ -33,6 +33,18 @@ namespace Biblioteca.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Detalhes(int? id)
+        {
+            if (id != null)
+            {
+                var usuario = await _usuarioInterface.BuscarUsuarioPorId(id);
+                return View(usuario);
+            }
+
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public async Task<ActionResult> Cadastrar(UsuarioCriacaoDto usuarioCriacaoDto)
         {
