@@ -44,7 +44,7 @@ namespace Biblioteca.Services.Usuario
         {
             try
             {
-                var usuario = await _context.Usuarios.FirstOrDefaultAsync(usuarioDB => usuarioDB.Id == id);
+                var usuario = await _context.Usuarios.Include(endereco => endereco.Endereco).FirstOrDefaultAsync(usuarioDB => usuarioDB.Id == id);
                 return usuario;
             }
             catch (Exception ex)

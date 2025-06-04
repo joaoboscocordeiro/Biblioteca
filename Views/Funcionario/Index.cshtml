@@ -43,7 +43,6 @@
                     @foreach (var funcionario in Model)
                     {
                         <tr>
-
                             @if (funcionario.Situacao == true)
                             {
                                 <td>
@@ -57,7 +56,6 @@
                                 </td>
                             }
 
-                            <td></td>
                             <td>@funcionario.Usuario</td>
                             <td>@funcionario.NomeCompleto</td>
                             <td>@funcionario.Endereco.Estado</td>
@@ -67,12 +65,9 @@
                                 <a asp-controller="Usuario" asp-action="Detalhes" asp-route-id="@funcionario.Id" class=" btn btn-warning"><i class="bi bi-file-earmark-zip mx-2"></i>Detalhes</a>
                                 <a asp-controller="Usuario" asp-action="Editar" asp-route-id="@funcionario.Id" class=" btn btn-info"><i class="bi bi-pencil mx-2"></i>Editar</a>
                             </td>
+
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr><td colspan="7" class="text-center">Sem Funcionários Registrados!</td></tr>
                 }
             }
 
